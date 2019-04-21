@@ -1,0 +1,49 @@
+1、首先先查看当前系统是否安装java
+
+rpm -qa | grep java
+输完命令后看有没有版本数据
+
+2、如果有使用rpm -e --nodeps 要卸载的版本
+
+上传jdk到/usr/local目录下
+
+下载地址
+
+https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+
+
+3、上传完后使用解压命令
+
+tar -zxvf /usr/local/jdk版本
+
+ 
+
+4、进行jdk变量配置
+
+vi /etc/profile
+
+在最后加入
+
+JAVA_HOME=/usr/local/jdk1.8.0_201
+CLASSPATH=.:$JAVA_HOME/lib/tools.jar
+PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME CLASSPATH PATH
+
+ 
+
+5、接下来按下esc
+
+输入:wq 保存
+
+6、重新加载配置文件
+
+source /etc/profile
+
+ 
+
+7、检验jdk是否安装成功  
+
+输入javac  或者java -version
+
+有数据即可
