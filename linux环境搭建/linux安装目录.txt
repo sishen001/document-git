@@ -1,15 +1,16 @@
-1£ºlz rz µÄ°²×°Çë²Î¿¼ÎÄÕÂ£»Èç¹û²»ÄÜÏÂÔØ ÔÚ°Ù¶ÈÔÆÅÌµÄ»·¾³´î½¨ÖĞÓĞ£»
-2: jdk °²×°Çë²Î¿¼ÎÄÕÂ£»Èç¹û²»ÄÜÏÂÔØ ÔÚ°Ù¶ÈÔÆÅÌµÄ»·¾³´î½¨ÖĞÓĞ£»
-3£º firewall-cmd --zone=public --add-port=2181/tcp --permanent ¿ªÆô¶Ë¿Ú
-4£ºkafka
-  £¨0£©ÅäÖÃĞÅÏ¢
-        ip:111.196.215.121  port:9092 Ä¿Ç°ÊÇµ¥µã  °æ±¾1.1.0  È«Ãû£º2.11-1.1.0
+1ï¼šlz rz çš„å®‰è£…è¯·å‚è€ƒæ–‡ç« ï¼›å¦‚æœä¸èƒ½ä¸‹è½½ åœ¨ç™¾åº¦äº‘ç›˜çš„ç¯å¢ƒæ­å»ºä¸­æœ‰ï¼›
+2: jdk å®‰è£…è¯·å‚è€ƒæ–‡ç« ï¼›å¦‚æœä¸èƒ½ä¸‹è½½ åœ¨ç™¾åº¦äº‘ç›˜çš„ç¯å¢ƒæ­å»ºä¸­æœ‰ï¼›
+3ï¼š firewall-cmd --zone=public --add-port=2181/tcp --permanent å¼€å¯ç«¯å£
+4ï¼škafka
+  ï¼ˆ0ï¼‰é…ç½®ä¿¡æ¯
+        ip:111.196.215.121  port:9092 ç›®å‰æ˜¯å•ç‚¹  ç‰ˆæœ¬1.1.0  å…¨åï¼š2.11-1.1.0
 
-  £¨1£©²Ù×÷ÃüÁî
-   a:·şÎñ¶ËÆô¶¯£ºbin/kafka-server-start.sh  -daemon config/server.properties 
-   b:´´½¨topic£ºbin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
-   c:ÏÔÊ¾zookeeper½Úµã£ºbin/kafka-topics.sh --list --zookeeper localhost:2181
-   d:·¢ËÍÏûÏ¢£ºbin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
-   e:Ïû·ÑÏûÏ¢£ºbin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test   --from-beginning
-5£ºzookeeper
-    ip:111.196.215.121  port:2181  Ä¿Ç°ÊÇµ¥µã  °æ±¾3.4.14
+  ï¼ˆ1ï¼‰æ“ä½œå‘½ä»¤
+   a:æœåŠ¡ç«¯å¯åŠ¨ï¼šbin/kafka-server-start.sh  -daemon config/server.properties 
+   b:åˆ›å»ºtopicï¼šbin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+   b1:åˆ é™¤topic:bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic test
+   c:æ˜¾ç¤ºzookeeperèŠ‚ç‚¹ï¼šbin/kafka-topics.sh --list --zookeeper localhost:2181
+   d:å‘é€æ¶ˆæ¯ï¼šbin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+   e:æ¶ˆè´¹æ¶ˆæ¯ï¼šbin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test   --from-beginning
+5ï¼šzookeeper
+    ip:111.196.215.121  port:2181  ç›®å‰æ˜¯å•ç‚¹  ç‰ˆæœ¬3.4.14
