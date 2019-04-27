@@ -13,8 +13,7 @@
    d:发送消息：bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
    e:消费消息：bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test   --from-beginning
    f:消费消息（新）：bin/kafka-console-consumer.sh --zookeeper 192.168.1.12:2181 --consumer-property group.id=testGroup  --topic test   --from-beginning
-   g:查看组topic状态（old）：bin/kafka-topics.sh --zookeeper 192.168.1.12:2181 --topic test  --describe
-   g1：查看组topic状态（new）：bin/kafka-consumer-groups.sh --bootstrap-server 192.168.1.12:9092 --describe --group testGroup
-   h:查看某个consumer组：bin/kafka-consumer-groups.sh --zookeeper  192.168.1.12:2181  --describe --group testGroup
+   g:查看组状态（old）：bin/kafka-topics.sh --zookeeper 192.168.1.12:2181 --topic test  --describe
+   g1：查看组状态（new）：bin/kafka-consumer-groups.sh --bootstrap-server 192.168.1.12:9092 --describe --group testGroup
 5：zookeeper
     ip:111.196.215.121  port:2181  目前是单点  版本3.4.14

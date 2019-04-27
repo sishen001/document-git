@@ -1,0 +1,21 @@
+1：虚拟机之间文件传输
+scp -r /usr/local/kafka  root@192.168.1.13:/usr/local/
+本地kafka目录及子文件 都放入到远程local下
+
+2：防火墙 开启端口访问
+firewalld -cmd --zone=public --add-port=9100/tcp -- permanent
+
+3：重启防火墙
+firewall-cmd --reload
+
+------------------mysql-----------------------------
+
+chown -R openscanner:openscanner /var/lib/mysql  更改文件权限
+service mysqld restart mysql重启
+update user set password=password('123456') where user='root'; 更改mysql root 密码
+GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY "root";　 root用户远程访问
+firewall-cmd --zone=public --add-port=3306/tcp --permanent  添加防火墙开放端口
+firewall-cmd --reload   重启防火墙
+
+create user test; 创建用户
+GRANT REPLICATION SLAVE ON *.* TO 'test'@'192.168.1.%' IDENTIFIED BY 'mysql'; 给test用户哦配置访问的服务器地址 用户密码是mysql

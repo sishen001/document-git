@@ -27,7 +27,6 @@ partition备份的数量；
 22：kafka 新版和旧版 因为元数据存储的地方不同，导致命令不同，例如查看组信息，新版在broker中，老版在zookeeper中
     例如：bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group testGroup  （新版）
           bin/kafka-consumer-groups.sh --zookeeper 127.0.0.1:2181 --list  （旧版）
-23: 局域网通信需要关闭防火墙，看是否ping通 ，配置要改成advertised.listeners=PLAINTEXT://192.168.1.12:9092（外网监听）
 问题（1）：
 两个消费者消费同一个topic的同一个分区，流程时怎样的，正常业务一个消息只能被一个消费者消费，
 一般不会重复消费，kafka是否可以满足；
