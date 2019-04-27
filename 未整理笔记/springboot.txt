@@ -1,0 +1,6 @@
+1：springboot 项目主要依赖配置
+      a:spring-boot-starter-parent
+      b:spring-boot-starter-web(如果是web项目)
+2:@import  导入bean ,可以将任何一个class 当成组件导入进去；相当于compotent
+3：@conditional(value = Object.class)  条件注解 
+4：@springbootApplication = @SpringbootConfiguration+@EnableAutoConfiguration+@ComponentScan

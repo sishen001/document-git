@@ -1,0 +1,16 @@
+1:jdk1.5之前是thread 和 Runable，之后又callable
+2；futureTask，volite修饰符， 
+crtl+shift+B 全选  回车 查看继承结构图
+3：多线程的目的 就是最大限度的利用cpu资源；当某一线程不需要占用cpu，而只和io等资源打交道时，让需要占用cpu的线程有机会获取cpu资源；
+4：线程的实现方式：Runable，Thread，Callable
+5：线程的生命周期：a:初始化:new
+                              b:就绪：调用.start();这时候需要等待jvm的调度，不一定会马上执行；
+                              c:运行：执行 run（） 方法；
+                                                 c1：等待  wait 
+                                                 c2：睡眠：sleep
+                                                 c3：阻塞：blocked/  同步锁 
+                              d：死亡，run执行完毕，调用stop，异常抛出 ，都会导致线程死亡；
+6：让线程有序执行：join 方法；join方法可以阻塞主线程，当本线程调用完毕后继续执行；
+7：wating 会释放对象锁，进入等待状态，当被唤醒时，会马上进入准备状态，获取对象锁，
+8：sleep 不会释放对象锁，一直占有，知道时间结束；
+9：yeild:使用该方法有机会释放cpu资源，暗示cpu降低对该资源的调度，具体还要看cpu的调度；

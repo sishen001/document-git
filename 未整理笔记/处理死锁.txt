@@ -1,0 +1,18 @@
+https://blog.csdn.net/wanderlustLee/article/details/79235005
+https://www.cnblogs.com/duhuo/p/5678286.html
+https://www.cnblogs.com/simpledev/p/5426705.html
+
+-- 查询线程当前事务状态
+select * from information_schema.innodb_trx
+
+# 上面sql详解
+https://www.cnblogs.com/likui360/p/5856114.html
+
+show engine innodb status
+
+-- 查看所有mysql 处理时间超过2分钟的线程
+select concat('kill ', id, ';')
+from information_schema.processlist
+where command != 'Sleep'
+and time > 2*60
+order by time desc 

@@ -1,0 +1,34 @@
+1：卡发卡是一种高吞吐量的分布式发布定于消息系统，使用Scala编写；
+2：Topic： kafak按照topic 分类维护消息；
+3：Producer：生产消息
+4：Consumer ：消费者
+5：Broker：存储数据的地方
+6：每一个topic 下面会维护一个或者多个分区（类似于队列）；
+7：partition 分区是一个有序的message序列，这些message按照顺序添加到一个叫做commit log的文件中；
+8：每隔partition中的额消息都有一个唯一的编号；称之为offerset（偏移量）；
+9：当消息被消费后，offerset 会偏移
+10：kafka的消息默认保留七天，消息被消费后不会立刻删除，只是偏移了1个位置；
+11：kafka可以指定分区的offerset 进行消费；
+12：kafka的性能与保留的数据量大小没有关系；
+13：kafka的consumer对集群的影响非常少，添加一个或者减少一个consumer，对于集群或者其他消费者来说，都是没有影响的，
+每个消费者维护自己的offset；
+14：rocketMQ前身就是kafka
+15：kafka设置分区可以调高消费者的并发量，合理的设置分区可以有效的减少消费压力；
+16：log的partitions 分布在kafka集群中不同的broker，每隔broker可以请求其他备份的broker上的partition的数据；kafka集群支持配置一个
+partition备份的数量；
+17：kafka 一个分区只能被一个消费者消费（为了保证顺序性，硬性规定）
+18：消费者消费成功返回ack（确认）状态；
+19：每一个consumer都要标记自己属于哪一个 group ，message会被传递到某一个组的 一个consumer，如果所有的consumer都在一个group
+下，就类似与传统的queue，如果每个消费者都有一个group，相当于 public-subscribe模型；
+20：生产者将消息发送到topic中去，同时负责选择将message 发送到topic 的哪一个partition中，，可以通过round-robin做负载均衡；
+也可以使用关键字进行区分，第二种方式使用的较多；
+21：当一个topic创建多个分区时，如果开启了多个副本，那么就意味着 各个的分区的leader副本是不一致的，在消费消息时，不会因为一个分区挂掉了而导致
+服务的不可用，进一步提高了服务的高可用性；
+问题（1）：
+两个消费者消费同一个topic的同一个分区，流程时怎样的，正常业务一个消息只能被一个消费者消费，
+一般不会重复消费，kafka是否可以满足；
+consumer有组的概念，如果每个consumer有不同的groupid，那么所有consumer都会消费，如果只有一个groupid，那么只有一个consumer会消费
+并且按照顺序消费；
+
+
+
