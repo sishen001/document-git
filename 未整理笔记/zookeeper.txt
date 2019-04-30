@@ -1,0 +1,46 @@
+1：分布式session 解决方案  session center 一般利用缓存存储session（redis，memchache）
+2：数据库：读写分离，换数据库，分库分表，云数据库（TIdb，不需要前三个东西了）
+3：读写分离：降低主库查询，业务：读写分离，主从同步
+   中间件两种：proxy，jdbc
+    proxy：mycat、 altas，mysql-proxy
+    jdbc：sharding-jdbc，tddl
+4：分库分表：垂直，水平，主要解决热点数据问题（使用量大的数据，例如订单，用户）
+5：分布式消息中间件：异步解耦削峰
+6：zk如何应用：1；分布式配置中心（注册中心）；分布式job，服务的注册于发现；存储数据；
+7：leader负责所有响应对zokkeeper状态变更的请求，他会将每个状态更新请求进行排序和编号，保证内部消息处理的fifo，写操作都走leader
+8：fllower的逻辑主要是处理读请求，还有选举操作
+9：observer主要提高吞吐量，投票权利；不需要将事务持久化到磁盘，可以帮助follower处理请求；
+10：一般涉及客户端多到夸机房，可以设置一些observer服务器；
+11：常用命令 ：a:查看所有节点：ls /
+               b:查看所有节点详细： ls2/
+	       c:获取节点内容信息： get /node   get/node  wathcher
+	       d:创建节点：create /目录 value  -s 持久有序节点， -e 临时节点； 
+	       e:删除： delete /name    rmr /目录
+	       f:离开：quit
+
+	       g：setAcl /目录  auth:wukong:wukong:cdrwa
+	       g1:getAcl /目录
+	       g2：添加用户 ： addauth digest pengfei:pengfei  也可以用它登陆
+	       g3：给节点设置权限 ： setAcl /abc auth:pengfei:pengfei:cdrwa
+	        
+12：zookeeper操作是维护的为一个个数据节点，成为znode，类似于文件系统的层级树状的结构进行管理，如果znode存储数据，则以字节数组存储，
+    （byte array）；
+13：znode共四种类型，分别为：持久节点（有序），临时节点（有序），持久节点（无序），临时节点（无序）
+14：临时节点创建后，当前session结束就会失效；
+15：set  设置某个节点的值   set /pengfei
+16:client-zk  网络通讯用的host port 通过tcp ip 长连接进行session会话保持（例如dubbo客户端）
+17：session 状态： connecting connectted closed
+18：wathcher（监听器） 机制；是实现分布式协调的重要特性， zookeeper允许用户在指定节点注册一些wathcher，并在特定时间进行触发；
+19：用户在用wathcher 监听后，zookeeper 在相关事件会主动通知给监听者（例如http 请台）；
+20：ACL :相当于权限；1：word ，全世界都能访问；2：auth，授权方式；3：digest 用户名密码 4：ip:使用ip地址认证，一般都是用户名密码
+21：ACL支持权限：create 创建节点，read 获取节点，write 设置节点，delete 删除节点，admin：设置权限
+22：zookeeper 是高性能的，并且对于来自客户端每隔更新请求，都会分配全局唯一的递增编号
+23：zookeeper 核心方法   zookeeperMain
+24：wathcher 事件 针对 getData exist getChildren 三个方法会一直监听，其他的只会监听一次；
+25  acl 登陆命令：addauth digest pengfei:pengfei
+26：acl 设置用户名密码 addauth digest pengfei:pengfei
+27：curator:流式风格；封装的比较彻底；
+28：分布式配置中心：本质就是存储一些数据；通知；数据一致性；高可用（本地缓存，本地文件，zookeeper中心）
+29；分布式锁：夸jvm保证线程安全；zookeeper节点唯一的特性可以控制；（并发不高可以用，建议用redis分布式锁） curator客户端也提供了分布式锁，但是效果也不好；
+29：zookeeper 分布式锁开销大的原因是 客户端与服务端 注册中心需要三者协调空着完成，都需要网络通讯交互，所以慢；
+30：分布式服务注册于订阅：
