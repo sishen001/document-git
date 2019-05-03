@@ -14,6 +14,10 @@
 12：官网：springcloud.cc
 13:分库分表和读写分离区别：分库分表分担写压力，读写分离解决因为写而影响的查询效率
 14：eureka client 是到eureka连接中心注册，生产者负责注册服务，消费者负责获取服务消费；
+15：feign的调用在在consumer端，服务只是一个单纯的rest 服务注册到了eureka，feign通过开启eureka客户端，扫描feign下的包，完成依赖注入使用
+16：feign调用需要注意的是 get 与 post 接口编写，保证feign的接口写的方式与服务提供者方式相同，算是不是特别友好的地方
+      get @PathVariable("userId") String userId  post @RequestParam("userId") String userId，当然还有其他方式
+
 问题（1）
 如果通过客户端做负载均衡，如果有一台服务挂掉了，是否会影响服务的调用，是否会及时更新客户端缓存；
 问题（2）
