@@ -1,0 +1,4 @@
+1：过滤敏感路径
+2：设置敏感头信息
+#设置cookie传递
+3：zuul.routes.use-routing.ensitiveHeaders=

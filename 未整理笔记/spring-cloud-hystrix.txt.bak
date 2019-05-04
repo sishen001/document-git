@@ -1,0 +1,55 @@
+1：什么是服务扇出？服务调用结构类似于二叉树；
+2：什么是服务熔断？
+3：什么是服务雪崩？由于服务的多层调用，其中某一层出现了超时，会导致上级所有的服务不可用，引发服务雪崩
+4：什么是服务降级？
+5：全局异常处理 ControllerAdvice，处理指定异常
+6：解决方案，超时机制，仓壁隔离，熔断器，服务降级
+7：熔断器：一段时间内的失败次数或者失败率达到一定的比例；就熔断（熔断是一个条件，在某个条件下，就会出现某些后果（不一定可以接受））
+8：服务降级：到达了某个条件，拿到一个可预期结果给你（是一个处理的手段）
+9：一般异常，内存不够，超时等等都可以作为触发熔断的条件
+10：观察者模式更多的用在监控某些东西，达到了某些条件，去做某些事情
+11：一般服务的降级 的数据都和前端约定好，返回什么样的结果，给客户展示什么信息；
+12：一般都是热点方法，例如订单，支付，获取商品信息等等；
+13：如果不通过spring hystix 可以用原生的，自己封装 通过new 的方式调用，或者用注解 @HystrixCommand(fallbackMethod="aaaa")
+14: 熔断器被打开后，不会无限制调用fallback方法，通过 sleepwindowInMilliseconds 设置下一次放行一个请求的时间，例如5秒后放一个请求看是否成功
+15：熔断器 从关闭，到打开-半开，如果正常在关闭
+16：timeInmilliseconds 内 请求失败次数/总数，默认百分之50
+17：注意 EnableWebMvc  这个注解，了解下原理
+18：feign中 有服务降级配置；支持 hystrix，不过默认是关闭的，需要开启
+19：/actuator/health  查看cloud的健康状态
+20：测试：在超时或者异常等情况发生的熔断，恢复机制很快，只要等待一个请求正常，就可以恢复
+21:时间滑动窗口时间  timeInMilliseconds 是指 单位时间内
+22：errorThresholdPercentage 是指失败比例，默认百分之50（成功总数/请求总数）；
+23：超过阈值 就会打开熔断器（失败比例低于阈值或者 请求次数达到阈值）
+24：一旦熔断器，在经过 sleepWindowInMillsSeconds  这个时间内不会访问目标服务，会访问本地的fallback，超过这个时间会放开一个请求，如果成功 则关闭熔断器，恢复服务
+25： 21,22,23,24 称之为三态转换图；
+26：feign.hystrix.enable=true E版本之前模式是打开的，现在默认是关闭的，用的时候需要打开
+27：如果设置全局超时时间（若使用的ribbon+hystrix 则不需要设置超时，只需要设置 timeoutInMillsSeconds 就可以了）
+    ribbon.ReadTimeout = 2000(放弃)
+    ribbon.ConnectTimeout=2000（放弃）
+
+    出现异常的时候，当前实例进行重试
+    ribbon.MaxAutoRetries=1
+    切换实例重试次数
+    ribbon.MaxAutoRetriesNextServer =  1
+    对所有的操作进行重试（all 是所有的方法进行重试，true 对所有的 是重试（需要注意做服务的幂等性），false 对get重试）
+    ribbon.OkTORetryOnAllOperations=true
+
+
+    开启重试机制（默认是开启的
+    ）
+    spring.cloud.loadbalaner.retry.enabled=true
+
+    单位时间（在某个单位时间内，到达了阈值，熔断一个服务的时间，）
+    hystrix.command.default.execution.isolation.thread.timeoutInMillisenonds = 3000 > ( 1（本身超时） + 1（重试超时） + 1（切换实例重试超时）)*ribbon超时时间
+
+    # 全局关闭熔断：
+    hystrix.command.default.circuitBreaker.enabled=true(自测无效)
+
+    # 局部关闭熔断：(关闭)
+    hystrix.command.OrderApi#getOrderInfo(String).circuitBreaker.enabled=false（自测无效）
+
+    feign.hystrix.enabled=true（全局关闭熔断有效）
+    局部关闭熔断增加配置类在Feign注解里面
+    目前尚没有控制到某个方法做到局部熔断（）有时间研究？？？？？？（问题）
+  28：hystrix 配置监控需要配置一个servlet
