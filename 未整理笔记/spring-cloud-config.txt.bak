@@ -1,0 +1,22 @@
+1：是什么，怎么用，为什么用，高级操作是什么
+2：是一个分布式系统外部配置 提供了服务器端和客户端支持，包括了Config Server 和config Client两个部分
+3：由于config server 和client都实现了对Spring Environment 和PropertySource 抽象映射，因此
+4：spring cloud config 非常适合Spring 应用程序，当然也可以其他语言编写的应用程序配合使用
+5：config servier 是一个科横向扩展，集中式的配置服务器，他用于集中式管理应用程序各个环境下的配置，
+   默认使用Git 存储配置内容，也可以使用其他的，Config client 是config server的客户端，用于操作存储在
+   Config Server 中配置的属性；
+6：服务client---》config server--git
+7：运行期间可以动态调整，我们可以根据各个微服务的负载情况，动态调整数据源连接池和熔断法制，并且在调整配置是不停止服务；
+8：配置就该后可以自动更新
+9：访问方式 localhost:9001/application-prod.yml,localhost:9001/application/test/master,
+   localhost:9001/master(分支)/application-prod.yml
+10：bootstrap.yml 文件优先级最高，会覆盖 application文件
+11：bus+rabbitmq 可以对client 的属性进行实时更新
+12：服务端增加bus，客户端增加bus+rabbitmq，引用属性的类上增加注解，服务端增加configserver 注解
+13：服务端配置端口，客户端增加服务端的地址，用来寻找的，在bootsrap里面指定服务端地址，以及 指定的文件，
+    application 的服务名字和configserver上git上的文件名字一致
+14：说白了就是从分布式中心的git上的一个文件中，通过client端配置的获取的文件信息，去找配置文件而已；
+15：手动实现动态刷新属性值基于rabbitmq 流程就是 git上修改某个值后，通过在server监听到这个信息后，通过
+    rabbitmq 分发给集群中订阅该消息的client，然后调用actur。。那个jar包的refresh的接口进行刷新
+16：有个重要问题，就是git上的信息是明文的，需要通过jdk 的icejar进行加密，官网下载对应版本的包后
+    扔到jre/lib/secrity/下，server端的bootstrap.yml配置安全的密钥，客户端配置用户名密码即可；这样就需要登录才能看到信息

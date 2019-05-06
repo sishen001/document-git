@@ -1,4 +1,7 @@
 1：过滤敏感路径
 2：设置敏感头信息
-#设置cookie传递
+#设置cookie传递 
 3：zuul.routes.use-routing.ensitiveHeaders=
+4：zuul 过滤器分为四种类型，pr》routin》post -----》error
+5  zuul.simpleClassName.pre/routing/port/error.disable=true
+6:
