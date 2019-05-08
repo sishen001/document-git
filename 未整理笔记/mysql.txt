@@ -1,5 +1,5 @@
 
-
+以下操作针对centos7
  
 mysql 安装
 # wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
