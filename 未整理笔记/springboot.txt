@@ -1,22 +1,23 @@
-1��springboot ��Ŀ��Ҫ��������
+1：springboot 项目主要依赖配置
       a:spring-boot-starter-parent
-      b:spring-boot-starter-web(�����web��Ŀ)
-2:@import  ����bean ,���Խ��κ�һ��class ������������ȥ���൱��compotent
-3��@conditional(value = Object.class)  ����ע�� 
-4��@springbootApplication = @SpringbootConfiguration+@EnableAutoConfiguration+@ComponentScan
-5��@ImportResource �����Զ���xml(location="chasspath:bean.xml")
-6��springboot����˰汾��ͻ���⣬ͨ��start������ ������Ҫ�Ķ�������������
-7��importSelector ͨ�����ȫ·������һ��bean������� ͨ��import ע�⵼�룬������������ǲ����Լ�ע��ģ�
-8��beanDefinitonRegister  ͨ��bean������һ��bean�������, ͨ��import ע�⵼�룻������������ǲ����Լ�ע��ģ�
-9���Զ�װ�����̣�ͨ��springbootapplication ע�� ���룬�ҵ�autoConfig ע�⣬ͨ��ע��������࣬��ȡ���еĴ��Զ�װ���bean
-   ͨ��selectImports ���� ��ѯ�Զ�װ���jar���� meta��spring.factor �ļ��µ����е� ��Ҫװ����࣬�����ҵ�redisAutoConfig�࣬�ͻ����
-   ���࣬�ȶ�ȡ�����ע�⣬ͨ��ע���ж��Ƿ���ظ��࣬ͨ��properties ��ȡ�Զ������õ����ԣ�����ip port�����û�����õ����Ծ�����Ĭ�ϵ�
-   ��������ȡע��Ŀͻ���������jedis��������װ���ȥ����ȡȻ���ȡ�������Ϣ������redisTemplate����ʱ��Ϳ���ʹ���ˣ�����Զ�����redistTemplate��
-   �ͻ����ִ���Զ���ģ������˹�����һЩ�������������л���ʽ�ȵȣ��������̾���redis�Զ�װ��ԭ����˵�����Զ�װ����ǰ���Ҫ��bean��װ��һ��
-   Ȼ��ע�뵽spring�����У�
-10��mybatis���� ��dao.java �������Mapperע�⣬���������Ҫ������������������ScanMapper ָ�����ص�mapper�ļ�λ��
-11��ack ��Ϣȷ��
-12��kafka ���ܻᶪʧ��Ϣ���ٶȿ죻rocket���ܸߣ����Ǹ߼������շѣ�rabbit �ۺ������Ƚ�ǿ��activeMQ�������߻ᶪʧ��Ϣ���ۺ�����һ��
-13���Զ���springboot start�������������Զ�װ��ԭ������ʱ���ã�
+      b:spring-boot-starter-web(如果是web项目)
+2:@import  导入bean ,可以将任何一个class 当成组件导入进去；相当于compotent
+3：@conditional(value = Object.class)  条件注解 
+4：@springbootApplication = @SpringbootConfiguration+@EnableAutoConfiguration+@ComponentScan
+5：@ImportResource 导入自定义xml(location="chasspath:bean.xml")
+6：springboot解决了版本冲突问题，通过start启动器 加载想要的东西，简化了配置
+7：importSelector 通过类的全路径导入一个bean（组件） 通过import 注解导入，导入的类里面是不可以加注解的；
+8：beanDefinitonRegister  通过bean对象导入一个bean（组件）, 通过import 注解导入；导入的类里面是不可以加注解的；
+9：自动装配流程：通过springbootapplication 注解 进入，找到autoConfig 注解，通过注入的配置类，读取所有的待自动装配的bean
+   通过selectImports 方法 查询自动装配的jar包下 meta下spring.factor 文件下的所有的 需要装配的类，例如找到redisAutoConfig类，就会加载
+   该类，先读取该类的注解，通过注解判断是否加载该类，通过properties 读取自定义配置的属性，例如ip port，如果没有配置的属性就是用默认的
+   ，继续读取注解的客户端连接类jedis，将该类装配进去，读取然后读取该类的信息，创建redisTemplate，这时候就可以使用了，如果自定义了redistTemplate，
+   就会继续执行自定义的，可以人工设置一些参数，例如序列化方式等等；以上流程就是redis自动装配原理；说白了自动装配就是把需要的bean封装到一起，
+   然后注入到spring容器中；
+10：mybatis整合 的dao.java 必须加上Mapper注解，如果不加需要在启动类里面配置上ScanMapper 指定加载的mapper文件位置
+11：ack 消息确认
+12：kafka 可能会丢失消息，速度快；rocket性能高，但是高级特性收费，rabbit 综合能力比较强；activeMQ，并发高会丢失消息，综合能力一般
+13：自定义springboot start启动器，根据自动装配原理；暂时搁置；
+14：java -jar eureka-server-9000-0.0.1-SNAPSHOT.jar > log_yuedaoapi.file 2>&1 & 后台启动springboot 服务
 
-���⣨1�����Զ�װ���start Ϊʲô�ᱻspring���Զ�װ�� װ��ȥ��
+问题（1）：自动装配的start 为什么会被spring的自动装配 装进去？
