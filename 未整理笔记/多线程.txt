@@ -33,5 +33,39 @@ crtl+shift+B 全选  回车 查看继承结构图
 24：对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始
 25：为什么要用线程池？
 26：线程越多不代表效率越高；线程越多会消耗很多时间在cpu分片与上下文切换上；
-27：java中有几种线程池？普通线程池，定时线程池
-28：
+27：java中有几种线程池？普通线程池（threadPollExecotutor），定时线程池(SchduledThreadPoolExecutor)
+28：ThreadPoolExecutor 有五个内部类，分为两类，policy(策略)，worker(工作)
+29：线程池的体系：1：executor（执行接口），ExecutorService(提交接口)，AbstractExecutorService(把执行和提交接口合并，submit有返回值，execu 无返回值)
+    ThreadPoolExecutor（调用addwork offer》task 放入队列，run方法调用runwork方法 通过getTask从队列拿数据）
+    ScheduledThreadPoolExecutor（定时调度线程池）
+30：内部工作原理 1:corePoolSize:池中所保存的线程数，包括空线程；
+                 2：maximumPoolSize：池中允许的最大的线程数；
+		 3：keepAliveTime：当线程数大于核心，此为终止前多余的空线程等待新任务的最长时间；
+		 4：unit ：上面时间的单位；
+		 5：workQueue：执行前用于保存任务的队列，次队列仅保持有execute方法提交的Runnable任务（不需要返回值）
+		 6：threadFactory：执行程序创建新线程使用的工厂
+		 7：handler：由于超出线程范围和队列容量而执行的策略
+31：线程池运行思路 
+                 1：如果当前线程吧poolSize 小于corePoolSize，则创建新线程的执行任务；
+		 2：如果当前线程poolSize 大于corePoolSize，且等待队列未满，则进入等待队列；
+		 3：如果当前线程pooSize 大于corePoolSize 且小于maximumPoolSize，且等待队列已满，则创建新线程
+32：拒绝策略  
+                 1：AbortPolicy：抛出异常，默认
+		 2：CallerRunsPolicy：不使用线程池执行；
+		 3：DisCardPolicy：直接丢弃任务
+		 4：DiscardOldestPolicy：丢弃队列最旧的任务；
+		 5：jps 》 jstack 排查线程死锁；
+-------------------------------------------
+33：JMM&Lock
+34：单核cpu - 主存 只有一个 cache，现在多核的 cpu-主存 有三个cache
+35：（并发处理不同步）解决缓存不一致问题：bus总线锁，缓存一致性协议，简称MESI（I7 已经不再使用 ，在这基础上扩充）；
+36：MESI的四种状态；1修改，2 独享；3:共享，4 无效；
+37：堆的确定由于是动态分配内存，所有存储速度回可能慢一些（需要判断内存容量是否足够，不够需要扩容，扩容需要时间）
+38：栈的数据可以共享，读取速度仅次于cpu中的寄存器，非常快；主要存放基本类型变量；缺点是栈中的大小是需要事先指定，灵活性不足；
+39：java并发变三个概念：原子性，可见性，有序性；
+40：指令重排，Happens-before 原则，保证了 cpu执行指令虽然顺序不同，但是最终结果一致；
+41： 内存同步 ：开始读取数据加lock  处理完了会写主存，释放锁；
+42：数据是从主存里面读取的，读取到工作内存（副本），没有锁，多线程之间会有数据不一致问题；
+43：volatile 原理就是不读工作副本，只读 主存，所以数据就是透明的，因为大家都读主存；
+44：javap -i fileName.class  将class文件变成指令码；
+45：
