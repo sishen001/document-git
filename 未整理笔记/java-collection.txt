@@ -1,0 +1,6 @@
+1：entry, K V,Node queue,堆，栈，链表，红黑树 ，T， hash ，transient，时间复杂度，空间复杂度
+2：Map jdk1.8 在1.7基础上做了优化，优化了链表（数据越大，链表越长）
+3：HashMap在 put到扩容的临界点时会出现线程安全的问题；
+4：1.8 hashMap的数据结构 数组 +（链表+红黑树）
+5：并发解决方案：锁或者cpu指令（cas操作）
+6：hashTable 与concurentHashmap 锁不同，都是线程安全的，hashTable（sychriose），concurrentHashmap（ReetrantLock实现的）

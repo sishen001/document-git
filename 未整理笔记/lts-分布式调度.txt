@@ -1,0 +1,6 @@
+1：github 官网或者 自己github地址下载项目与demo
+2：运行源码的 build.sh  用 sh 执行
+3：修改dist 下的配置，其中包括 mysql地址与zookeeper地址
+4：启动 admin monitor
+5：启动demo中的 jobTracer，taskTracer，jobclient
+6：输入地址 admin所在服务器的8081端口，用户名密码 admin，http://localhost:8081/index.html

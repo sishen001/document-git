@@ -37,7 +37,7 @@ crtl+shift+B 全选  回车 查看继承结构图
 28：ThreadPoolExecutor 有五个内部类，分为两类，policy(策略)，worker(工作)
 29：线程池的体系：1：executor（执行接口），ExecutorService(提交接口)，AbstractExecutorService(把执行和提交接口合并，submit有返回值，execu 无返回值)
     ThreadPoolExecutor（调用addwork offer》task 放入队列，run方法调用runwork方法 通过getTask从队列拿数据）
-    ScheduledThreadPoolExecutor（定时调度线程池）
+    ScheduledThreadPoolExecutor（定时调度线程池），
 30：内部工作原理 1:corePoolSize:池中所保存的线程数，包括空线程；
                  2：maximumPoolSize：池中允许的最大的线程数；
 		 3：keepAliveTime：当线程数大于核心，此为终止前多余的空线程等待新任务的最长时间；
@@ -45,6 +45,26 @@ crtl+shift+B 全选  回车 查看继承结构图
 		 5：workQueue：执行前用于保存任务的队列，次队列仅保持有execute方法提交的Runnable任务（不需要返回值）
 		 6：threadFactory：执行程序创建新线程使用的工厂
 		 7：handler：由于超出线程范围和队列容量而执行的策略
+30.5：常用线程池优劣：
+                 1：FixedThreadPool；
+		       a:corePoolSize与maximumPoolSize相等，即其线程全为核心线程，是一个固定大小的线程池，是其优势；
+		       b:keepAliveTime = 0 该参数默认对核心线程无效，而FixedThreadPool全部为核心线程
+		       c:workQueue 为LinkedBlockingQueue（无界阻塞队列），队列最大值为Integer.MAX_VALUE。如果任务提交速度持续大余任务处理速度，
+		       会造成队列大量阻塞。因为队列很大，很有可能在拒绝策略前，内存溢出。是其劣势
+		       d:FixedThreadPool的任务执行是无序的;
+		       适用场景：可用于Web服务瞬时削峰，但需注意长时间持续高峰情况造成的队列阻塞。
+		 2: CachedThreadPool
+		       a:corePoolSize = 0，maximumPoolSize = Integer.MAX_VALUE，即线程数量几乎无限制；
+		       b:keepAliveTime = 60s，线程空闲60s后自动结束。
+		       c:workQueue 为 SynchronousQueue 同步队列，这个队列类似于一个接力棒，入队出队必须同时传递，
+		           因为CachedThreadPool线程创建无限制，不会有队列等待，所以使用SynchronousQueue；
+		       适用场景：快速处理大量耗时较短的任务，如Netty的NIO接受请求时，可使用
+		 3:SingleThreadExecutor
+		       a:FixedThreadPool可以向下转型为ThreadPoolExecutor，并对其线程池进行配置，
+		          而SingleThreadExecutor被包装后，无法成功向下转型。因此，SingleThreadExecutor被定以后，无法修改，做到了真正的Single
+		 4:ScheduledThreadPool
+		       a:newScheduledThreadPool调用的是ScheduledThreadPoolExecutor的构造方法，而ScheduledThreadPoolExecutor继承了ThreadPoolExecutor，构造是还是调用了其父类的构造方法
+		       可以做定时线程调度
 31：线程池运行思路 
                  1：如果当前线程吧poolSize 小于corePoolSize，则创建新线程的执行任务；
 		 2：如果当前线程poolSize 大于corePoolSize，且等待队列未满，则进入等待队列；
@@ -55,6 +75,9 @@ crtl+shift+B 全选  回车 查看继承结构图
 		 3：DisCardPolicy：直接丢弃任务
 		 4：DiscardOldestPolicy：丢弃队列最旧的任务；
 		 5：jps 》 jstack 排查线程死锁；
+附：使用SynchronousQueue 不可以设置大小，开启的线程数量是由任务数量决定的
+        LinkedBlockingQueue 可以设置大小，是阻塞队列，开启的线程数量根据队列的大小决定的
+	future.get() 会阻塞队列，导致，CachedThreadPool的线程数量不能一直开启，失去本身的优势；
 -------------------------------------------
 33：JMM&Lock
 34：单核cpu - 主存 只有一个 cache，现在多核的 cpu-主存 有三个cache
@@ -67,4 +90,39 @@ crtl+shift+B 全选  回车 查看继承结构图
 41： 内存同步 ：开始读取数据加lock  处理完了会写主存，释放锁；
 42：数据是从主存里面读取的，读取到工作内存（副本），没有锁，多线程之间会有数据不一致问题；
 43：volatile 原理就是不读工作副本，只读 主存，所以数据就是透明的，因为大家都读主存；
-44：
+44：javap -i fileName.class  将class文件变成指令码；
+45：volatile 不能保证原子性（例如i++  复合操作），只能保证从主存当中读的原子性，不能保证往主存中写的原子性，如果要保证原子性 ，就要用到锁（lock，Synchronized）,
+46：解决原子性 方案：1 锁，2，cas
+47：Synchronized，只一个重量级锁，重入锁，支持方法，代码块，（JVM级别的锁）
+48：Synchronized原理：通过javap -v xxx.class 编译成指令码后，锁定方法的指令：ACC_SYNCHRONIZED，代码块 monitorenter开始，monitorexit 结束；
+49：Join的底层用的wait，也是用monitorenter开始，monitorexit 结束； 做的  jvm监视器做的监控 objectMonitor() c++写的；
+50：JNI 是如果调用本地的C或者C++
+51： 对象锁不能保证线程安全，类锁可以（不同对象也可以保证线程安全）
+52：方法和代码块（对象锁和类锁）
+             1：对于普通同步方法，锁定的当前对象
+	     2：对于静态方法，所得是当前类Class对象
+	     3：对于同步方法快，锁是Synchonized 括号里配置的对象
+53：如果想要锁住多个对象保证线程安全，那么两个办法，1 用static 锁住对象，2：用另外一个对象包含待处理的对象，当前类锁即可；
+54：lock 是基于代码层级的锁，俗称隐式锁，显式锁；
+55：ReetrantLock 重入锁，
+56：使用lock方法 和unlock 一定要保证unlock被调用，用到finnaly
+57：ReetrantLock常用的方法
+             -----使用
+             1：lock()
+	     2: unlock();
+	     3: tryLock()
+	     4: lickInterruptibly
+	     -----统计-----
+	     5: getHoldCount
+	     6: getQueuedThreads
+58：Synchronized 手动的jvm级别重入锁，REentrantLock 手机动的 重入 lock指令
+59：Condition
+60：tampedLock 悲观锁，java1.8 推出的；
+61：ReecentLock 底层用的同步器，AbstarctQueueSynchroizer，并发变成核心类，俗称AQS
+62：同步器AbstarctQueueSynchroizer 的实现原理就是 队列+双向链表，JUC java util concurrent；
+63：CountDownLatch：允许一个线程或者多个线程 
+64: Semaphore 信号量，可以用于分布式限流，针对打个jvm设置并发；
+65：
+
+
+问题1：读为什么要用锁？
