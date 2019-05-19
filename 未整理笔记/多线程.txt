@@ -11,7 +11,7 @@ crtl+shift+B 全选  回车 查看继承结构图
                                                  c3：阻塞：blocked/  同步锁 
                               d：死亡，run执行完毕，调用stop，异常抛出 ，都会导致线程死亡；
 6：让线程有序执行：join 方法；join方法可以阻塞主线程，当本线程调用完毕后继续执行；
-7：wating 会释放对象锁，进入等待状态，当被唤醒时，会马上进入准备状态，获取对象锁，
+7：wating 会释放对象锁，进入等待状态，当被唤醒时，会马上进入准备状态，获取对象锁，（wait 和 notifyall 的使用一定是多个线程对应的一个对象，同一个对象的wait与notifyall，否则会异常）
 8：sleep 不会释放对象锁，一直占有，知道时间结束；
 9：yeild:使用该方法有机会释放cpu资源，暗示cpu降低对该资源的调度，具体还要看cpu的调度；
 10：futureTask 类里面的线程状态 0-6、
@@ -117,6 +117,14 @@ crtl+shift+B 全选  回车 查看继承结构图
 	     6: getQueuedThreads
 58：Synchronized 手动的jvm级别重入锁，REentrantLock 手机动的 重入 lock指令
 59：Condition
+ -----
+        Condition是在java 1.5中才出现的，它用来替代传统的Object的wait()、notify()实现线程间的协作，相比使用Object的wait()、notify()，使用Condition的await()、signal()这种方式实现线程间协作更加安全和高效。因此通常来说比较推荐使用Condition，阻塞队列实际上是使用了Condition来模拟线程间协作。
+	Condition是个接口，基本的方法就是await()和signal()方法；
+	Condition依赖于Lock接口，生成一个Condition的基本代码是lock.newCondition() 
+	调用Condition的await()和signal()方法，都必须在lock保护之内，就是说必须在lock.lock()和lock.unlock之间才可以使用
+	Conditon中的await()对应Object的wait()；
+	Condition中的signal()对应Object的notify()；
+	Condition中的signalAll()对应Object的notifyAll()。
 60：tampedLock 悲观锁，java1.8 推出的；
 61：ReecentLock 底层用的同步器，AbstarctQueueSynchroizer，并发变成核心类，俗称AQS
 62：同步器AbstarctQueueSynchroizer 的实现原理就是 队列+双向链表，JUC java util concurrent；
