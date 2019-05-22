@@ -19,5 +19,6 @@
 12：kafka 可能会丢失消息，速度快；rocket性能高，但是高级特性收费，rabbit 综合能力比较强；activeMQ，并发高会丢失消息，综合能力一般
 13：自定义springboot start启动器，根据自动装配原理；暂时搁置；
 14：java -jar eureka-server-9000-0.0.1-SNAPSHOT.jar > log_yuedaoapi.file 2>&1 & 后台启动springboot 服务
+15：后台启动 nohup java -jar hongyan-pushorder-core-1.0-SNAPSHOT-boot.jar > log/catalina_`date +%Y%m%d`.log  2>&1 &
 
 问题（1）：自动装配的start 为什么会被spring的自动装配 装进去？
